@@ -5,7 +5,7 @@ var io   = require('socket.io')(http);
 var port = process.env.PORT || 8080
 
 app.get('/', function(req, res){
-	res.sendFile(__dirname + '/index.html');
+	res.sendFile(__dirname + '/chatroom.html');
 });
 
 var users = {};
@@ -48,5 +48,5 @@ io.on('connection', function(socket){
 });
 
 http.listen(port, function(){
-	console.log('Listening on 8080......');
+	console.log('App running');
 });

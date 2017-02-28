@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="UTF-8">
+	<title>index Html</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	
+	<nav class="navbar navbar-inverse navbar-static-top">
+	    <div class="container-fluid">
+	        <div class="navbar-header navbar-left">
+	            <h2 class="navbar-brand">Fidi Chatroom</h2>
+	        </div>
+	    </div>
+	</nav>
+
+	<div class="container">
+		<div class="row">
+			<div id="homepage" class="col-md-4 col-md-offset-4">
+				<h1>Selamat datang di chatroom</h1>
+				<input type="text" id="nama" placeholder="nama kamu" class="form-control" required autofocus>
+				<br>
+				<button id="submit_name" class="btn btn-success col-md-4 col-md-offset-4">Masuk !</button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container">
+		<div style="margin-bottom: 100px;">
+			<div id="chatroom" class="hidden">
+				<div id="leftBox" class="col-md-8">
+					<ul id="messages"></ul>
+				</div>
+
+				<div class="col-md-4">
+					<div id="rightBox" class="panel panel-warning">
+						<div class="panel-heading">Daftar user yang Online</div>
+						<ul id="online"></ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<nav class="navbar navbar-inverse navbar-fixed-bottom">
+					<div class="container">
+						<form class="form-inline" style="padding-top: 5px;">
+							<input type="text" id="text_box" class="form-control" required autofocus>
+							<button class="btn btn-warning">kirim</button>
+						</form>
+					</div>
+				</nav>
+			</div>
+
+		</div>
+	</div>
+
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+		var socket = io();
+		var username = '';
+
+		$('form').submit(function(){
+			username = $('#nama').val();
+			socket.emit('newMessage', username+' '+ $('#text_box').val());
+			$('#text_box').val('');
+			isTyping = false;
+			return false;
+		});
+		//daftar user yg online
+		socket.on('onlineUsers', function(usernames){
+			$('#online').empty();
+			for(var i =0; i < usernames.length; i++){
+				$('#online').append($('<li id="user_' +  usernames[i] +'">').text(usernames[i]));
+			}
+		});
+		//mengeluarkan pesan
+		socket.on('newMessage', function(msg){
+			$('#messages').append($('<p class="alert alert-info">').text(msg));
+			$('.temporary').remove();
+		});
+
+		$('#submit_name').click(function(){
+			//validasi nama sudah ada atau belum
+			if ($('#nama') != '') {
+				username = $('#nama').val();
+				socket.emit('registerUser', username);
+			}
+		});
+		socket.on('registerRespond', function(status){
+			if (status == false) {
+				alert('username sudah ada, cari nama lain');
+			}else {
+				$('#chatroom').removeClass('hidden');
+				$('#homepage').addClass('hidden');
+			}
+		});
+		//when someone typing
+		var isTyping = false;
+		$('#text_box').keyup(function(){
+			if (isTyping == false) {
+				socket.emit('newTyping', username + 'sedang mengetik...');	
+			}
+			isTyping = true;
+		});
+		//mengeluarkan newtyping di daftar chat
+		socket.on('newTyping', function(msg){
+			$('#messages').append($('<li class="temporary">').text(msg));
+		});
+
+	</script>
+</body>
+</html>
