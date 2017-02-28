@@ -19,11 +19,13 @@
 
 	<div class="container">
 		<div class="row">
-			<div id="homepage" class="col-md-4 col-md-offset-4">
-				<h3 class="text-center">Selamat datang di chatroom</h3>
-				<input type="text" id="nama" placeholder="nama kamu" class="form-control" required autofocus>
-				<br>
-				<button id="submit_name" class="btn btn-success col-md-4 col-md-offset-4">Masuk !</button>
+			<div id="homepage">
+				<div class="col-md-4 col-md-offset-4">
+					<h3 class="text-center">Selamat datang di chatroom</h3>
+					<input type="text" id="nama" placeholder="nama kamu" class="form-control" required autofocus>
+					<br>
+					<button id="submit_name" class="btn btn-success col-md-4 col-md-offset-4">Masuk !</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -31,6 +33,7 @@
 	<div class="container">
 		<div style="margin-bottom: 100px;">
 			<div id="chatroom" class="hidden">
+				
 				<div id="leftBox" class="col-md-8">
 					<ul id="messages"></ul>
 				</div>
@@ -41,19 +44,20 @@
 						<ul id="online"></ul>
 					</div>
 				</div>
-			</div>
+			
 
-			<div class="row">
-				<nav class="navbar navbar-inverse navbar-fixed-bottom">
-					<div class="container">
-						<form class="form-inline" style="padding-top: 5px;">
-							<input type="text" id="text_box" class="form-control" required autofocus>
-							<button class="btn btn-warning">kirim</button>
-						</form>
-					</div>
-				</nav>
-			</div>
+				<div class="row">
+					<nav class="navbar navbar-inverse navbar-fixed-bottom">
+						<div class="container">
+							<form class="form-inline" style="padding-top: 5px;">
+								<input type="text" id="text_box" class="form-control" required autofocus>
+								<button class="btn btn-warning">kirim</button>
+							</form>
+						</div>
+					</nav>
+				</div>
 
+			</div>
 		</div>
 	</div>
 
@@ -64,7 +68,7 @@
 
 		$('form').submit(function(){
 			username = $('#nama').val();
-			socket.emit('newMessage', username+' '+ $('#text_box').val());
+			socket.emit('newMessage', username+' >> '+ $('#text_box').val());
 			$('#text_box').val('');
 			isTyping = false;
 			return false;
