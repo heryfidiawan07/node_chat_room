@@ -1,7 +1,7 @@
 {
-  "name": "chat",
+  "name": "",
   "version": "1.0.0",
-  "description": "",
+  "description": "App Chat",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,6 +10,6 @@
   	"express":"^4.10.2",
   	"socket.io":"^1.4.8"
   },
-  "author": "",
+  "author": "hery fidiawan",
   "license": "ISC"
 }
